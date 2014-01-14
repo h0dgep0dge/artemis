@@ -24,8 +24,6 @@ int main() {
 		close(1);
 		return 0;
 	}
-	// printf("%i \n",r);
-	// while(1);
 	while(1) {
 		int sc;
 		char raw;
