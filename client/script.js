@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://10.22.33.231:8080");
+var ws = new WebSocket("ws://10.22.33.12:8080");
 
 ws.onopen = function() {
 	$("body").fadeIn();
