@@ -92,13 +92,12 @@
 	/*formats letters on circles*/
 	.circle-up, .circle-down, .circle-left, .circle-right { 
 		font-size: 19px;
-
+		margin: auto;
 		font-family: Tahoma, Geneva, sans-serif;
 		text-align: center;
 		text-transform:uppercase;
 		color: black;
-
-		padding-top: 15px;
+		padding-top: 14px;
 
 		/*formats shape*/
 		width: 53px; 
@@ -110,15 +109,10 @@
 		position: relative;
 		}
 
-	.circle-up, .circle-down { 
-
-		padding-top: 10px;
-		}
-
 	#lr_circles{
 		width: 170px;
 		height: 60px;
-		padding: 5px 0;
+		padding: 5px 0 0 0;
 		}
 
 		.circle-left{ 
