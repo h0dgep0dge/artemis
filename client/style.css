@@ -1,16 +1,17 @@
 #arrows{
-	width: 130px;
-	height: 130px;
+	width: 170px;
+	height: 180px;
 	padding: 8px 0;
 	display: inline-block;
+	vertical-align: top;
 	}
 
 	.triangle-up { 
 		width: 0; 
 		height: 0; 
-		border-left: 20px solid transparent; 
-		border-right: 20px solid transparent; 
-		border-bottom: 40px solid red; 
+		border-left: 27px solid transparent; 
+		border-right: 27px solid transparent; 
+		border-bottom: 50px solid red; 
 		position: relative;
 		top: 0;
 		margin: auto;
@@ -19,28 +20,27 @@
 	.triangle-down { 
 		width: 0; 
 		height: 0; 
-		border-left: 20px solid transparent; 
-		border-right: 20px solid transparent; 
-		border-top: 40px solid red; 
+		border-left: 27px solid transparent; 
+		border-right: 27px solid transparent; 
+		border-top: 50px solid red; 
 		position: relative;
 		bottom: 0px;
-		float: bottom;
 		margin: auto;
 		}
 
 
-		#lr_arrows{
-			width: 130px;
-			height: 40px;
-			padding: 5px 0;
-			}
+	#lr_arrows{
+		width: 170px;
+		height: 60px;
+		padding: 10px 0 5px;
+		}
 
 		.triangle-left { 
 			width: 0; 
 			height: 0; 
-			border-top: 20px solid transparent; 
-			border-bottom: 20px solid transparent; 
-			border-right: 40px solid red; 
+			border-top: 27px solid transparent; 
+			border-bottom: 27px solid transparent; 
+			border-right: 50px solid red; 
 			position: relative;
 			left: 0;
 			float: left;
@@ -50,79 +50,77 @@
 		.triangle-right { 
 			width: 0; 
 			height: 0; 
-			border-top: 20px solid transparent; 
-			border-bottom: 20px solid transparent; 
-			border-left: 40px solid red; 
+			border-top: 27px solid transparent; 
+			border-bottom: 27px solid transparent; 
+			border-left: 50px solid red; 
 			position: relative;
 			right: 0;
 			float: right;
 			}
 
-
 #select_start{
-	width:80px;
+	width:100px;
 	padding: 8px 0;
 	height: 130px;
 	display: inline-block;
+	vertical-align: top;
+	padding-top: 72px;
 	}
 	
 	.ss_button{
-		font-size: 7px;
+		font-size: 12px;
 		font-family: Tahoma, Geneva, sans-serif;
 		text-align: center;
 		text-transform:uppercase;
 		color: white;
-		width:28px;
+		width:54px;
 		background-color: blue;
-		padding: 2px;
-		margin: 2px;
+		margin: 2px auto;
+		padding: 3px ;
+		vertical-align: middle;
 		}
 
 #circles{
-	width: 130px;
+	width: 170px;
+	height: 190px;
 	padding: 8px 0;
-	height: 130px;	
 	display: inline-block;
+	vertical-align: top;
 	}
 
-	
-	.circle-up, .circle-down { 
-		width: 40px; 
-		height: 30px; 
-		background: yellow; 
-		-moz-border-radius: 19px; 
-		-webkit-border-radius: 19px; 
-		border-radius: 19px;
-		position: relative;
-		margin: auto;
 
-		/*formats letters*/
-		font-size: 17px;
+	/*formats letters on circles*/
+	.circle-up, .circle-down, .circle-left, .circle-right { 
+		font-size: 19px;
+
 		font-family: Tahoma, Geneva, sans-serif;
 		text-align: center;
 		text-transform:uppercase;
-		color: blackS;
+		color: black;
+
+		padding-top: 15px;
+
+		/*formats shape*/
+		width: 53px; 
+		height: 39px; 
+		background: yellow; 
+		-moz-border-radius: 32px; 
+		-webkit-border-radius: 32px; 
+		border-radius: 32px;
+		position: relative;
+		}
+
+	.circle-up, .circle-down { 
+
 		padding-top: 10px;
 		}
 
-	
 	#lr_circles{
-		width: 130px;
-		height: 40px;
+		width: 170px;
+		height: 60px;
 		padding: 5px 0;
 		}
 
-		.circle-left, .circle-right{ 
-			width: 40px; 
-			height: 40px; 
-			background: yellow; 
-			-moz-border-radius: 19px; 
-			-webkit-border-radius: 19px; 
-			border-radius: 19px;
-			position: relative;
-			left: 0;
-			}
-		
 		.circle-left{ 
 			float: left;
 			}

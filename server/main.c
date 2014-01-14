@@ -28,6 +28,7 @@ int main() {
 		int sc;
 		char raw;
 		char update_buffer[2];
+		while(read(fds[0],&raw,1) > 0 && raw != '#');
 		for(sc = 0;sc < 2;) {
 			if(read(fds[0],&raw,1) <= 0) error(1,errno,"read");
 			update_buffer[sc++] = raw;
