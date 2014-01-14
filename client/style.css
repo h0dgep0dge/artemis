@@ -3,6 +3,7 @@
 	height: 130px;
 	padding: 8px 0;
 	display: inline-block;
+	vertical-align: top;
 	}
 
 	.triangle-up { 
@@ -58,24 +59,26 @@
 			float: right;
 			}
 
-
 #select_start{
 	width:80px;
 	padding: 8px 0;
 	height: 130px;
 	display: inline-block;
+	vertical-align: top;
+	padding-top: 50px;
 	}
 	
 	.ss_button{
-		font-size: 7px;
+		font-size: 12px;
 		font-family: Tahoma, Geneva, sans-serif;
 		text-align: center;
 		text-transform:uppercase;
 		color: white;
-		width:28px;
+		width:54px;
 		background-color: blue;
-		padding: 2px;
-		margin: 2px;
+		margin: 2px auto;
+		padding: 2px ;
+		vertical-align: middle;
 		}
 
 #circles{
@@ -83,6 +86,7 @@
 	padding: 8px 0;
 	height: 130px;	
 	display: inline-block;
+	vertical-align: top;
 	}
 
 	
