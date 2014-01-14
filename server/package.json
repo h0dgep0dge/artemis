@@ -1,0 +1,14 @@
+{
+  "name": "Artemis",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.coffee",
+  "dependencies": {
+    "ws": "~0.4.31"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPLv3"
+}
