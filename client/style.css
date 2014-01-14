@@ -140,3 +140,7 @@
 .pressed {
 	opacity: 0.5;
 }
+
+body {
+	display: none;
+}
