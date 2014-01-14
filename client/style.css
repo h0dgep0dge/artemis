@@ -137,3 +137,6 @@
 
 
 
+.pressed {
+	opacity: 0.5;
+}
