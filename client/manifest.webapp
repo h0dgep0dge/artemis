@@ -1,0 +1,5 @@
+{
+  "name": "Controller",
+  "launch_path": "/index.html",
+  "type": "privileged"
+}
