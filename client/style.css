@@ -93,11 +93,12 @@
 	.circle-up, .circle-down, .circle-left, .circle-right { 
 		/*formats letters on circles*/
 		font-size: 19px;
+		margin: auto;
 		font-family: Tahoma, Geneva, sans-serif;
 		text-align: center;
 		text-transform:uppercase;
-		color: blackS;
-		padding-top: 15px;
+		color: black;
+		padding-top: 14px;
 
 		/*formats shape*/
 		width: 53px; 
@@ -117,7 +118,7 @@
 	#lr_circles{
 		width: 170px;
 		height: 60px;
-		padding: 5px 0;
+		padding: 5px 0 0 0;
 		}
 	
 		.circle-left{ 
