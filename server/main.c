@@ -18,28 +18,30 @@
 int conf_to_id(char *name);
 char *str_tolower(char *str,int len);
 int nid_to_lid(char nid);
-char actions[10][20];
+char actions[9][10][20];
 char mappings[10][20];
 
 int main() {
 	char conf[] = "./artemis.conf";
-	char linebuffer[200];
+	char linebuffer[300];
 	FILE *c;
-	int fds[2],r;
+	int i,fds[2],r;
 	struct stat buffer;
 	
-	strcpy(actions[0],"Up");
-	strcpy(actions[1],"Down");
-	strcpy(actions[2],"Left");
-	strcpy(actions[3],"Right");
+	for(i = 0;i < 8;i++) {
+		strcpy(actions[i][0],"Up");
+		strcpy(actions[i][1],"Down");
+		strcpy(actions[i][2],"Left");
+		strcpy(actions[i][3],"Right");
 	
-	strcpy(actions[4],"a");
-	strcpy(actions[5],"b");
-	strcpy(actions[6],"x");
-	strcpy(actions[7],"y");
+		strcpy(actions[i][4],"a");
+		strcpy(actions[i][5],"b");
+		strcpy(actions[i][6],"x");
+		strcpy(actions[i][7],"y");
 	
-	strcpy(actions[8],"Return");
-	strcpy(actions[9],"Escape");
+		strcpy(actions[i][8],"Return");
+		strcpy(actions[i][9],"Escape");
+	}
 	
 	strcpy(mappings[0],"up");
 	strcpy(mappings[1],"down");
@@ -60,12 +62,21 @@ int main() {
 		if((c = fopen(conf,"r")) == NULL) error(1,errno,"fopen");
 		int line;
 		for(line = 1;fgets(linebuffer,200,c) != NULL;line++) {
+			char playerbuffer[100];
 			char keybuffer[100];
 			char valuebuffer[100];
 			int i,c;
 			for(i = 0;isspace(linebuffer[i]);i++);
 			if(i == strlen(linebuffer)) // Empty line
 				continue;
+			if(linebuffer[i] == '#') continue; // Line is a comment
+			for(c = 0;linebuffer[i] != ':';i++,c++) playerbuffer[c] = linebuffer[i];
+			if(c == 0) { // Player missing
+				fprintf(stderr,"Player missing on line %i \n",line);
+				return 1;
+			}
+			i++;
+			playerbuffer[c] = '\0';
 			for(c = 0;linebuffer[i] != ':';i++,c++) keybuffer[c] = linebuffer[i];
 			if(c == 0) { // Key missing
 				fprintf(stderr,"Key missing on line %i \n",line);
@@ -73,26 +84,47 @@ int main() {
 			}
 			i++;
 			keybuffer[c] = '\0';
-			for(c = 0;isalpha(linebuffer[i]);i++,c++) valuebuffer[c] = linebuffer[i];
+			for(c = 0;isalnum(linebuffer[i]);i++,c++) valuebuffer[c] = linebuffer[i];
 			if(c == 0) { // Value missing
 				fprintf(stderr,"Value missing or malformed on line %i \n",line);
 				return 1;
 			}
 			valuebuffer[c] = '\0';
+			if(strlen(playerbuffer) != 1) {
+				fprintf(stderr,"Malformed player field on line %i \n",line);
+				return 1;
+			}
+			else if(!isdigit(playerbuffer[0])) {
+				fprintf(stderr,"Player field must be a number \n");
+				return 1;
+			}
+			else if(playerbuffer[0] == '0') {
+				fprintf(stderr,"Player field must be greater than 0 \n");
+				return 1;
+			}
+			
 			i = conf_to_id(str_tolower(keybuffer,100));
 			if(i < 0) {
 				fprintf(stderr,"Unkown key on line %i \n",line);
 				continue;
 			}
-			strcpy(actions[i],valuebuffer);
+			strcpy(actions[playerbuffer[0]-'1'][i],valuebuffer);
+			printf("%s %s\n",actions[playerbuffer[0]-'1'][i],valuebuffer);
 		}
 		fclose(c);
 	} else {
 		int i;
 		if((c = fopen(conf,"w")) == NULL) error(1,errno,"fopen");
-		for(i = 0;i < 10;i++) fprintf(c,"%s:%s\n",mappings[i],actions[i]);
+		fprintf(c,"# Config file format\n"
+		          "# player:button:key\n");
+		for(i = 0;i < 10;i++) fprintf(c,"1:%s:%s\n",mappings[i],actions[0][i]);
+		fprintf(c,"\n");
+		for(i = 0;i < 10;i++) fprintf(c,"2:%s:%s\n",mappings[i],actions[1][i]);
 		fclose(c);
 	}
+	//int a,b;
+	//for(a = 0;a < 9;a++) for(b = 0;b < 10;b++) printf("%i %s %s\n",a,mappings[b],actions[a][b]);
+	//return 0;
 	r = fork();
 	if(r < 0) error(1,errno,"fork");
 	if(r == 0) {
@@ -104,18 +136,20 @@ int main() {
 	while(1) {
 		int sc,lid,r;
 		char raw;
-		char update_buffer[2];
+		char update_buffer[3];
 		while(read(fds[0],&raw,1) > 0 && raw != '#');
-		for(sc = 0;sc < 2;) {
+		for(sc = 0;sc < 3;) {
 			if(read(fds[0],&raw,1) <= 0) error(1,errno,"read");
 			update_buffer[sc++] = raw;
 		}
 		if((lid = nid_to_lid(update_buffer[0])) < 0) continue;
+		if(!isdigit(update_buffer[2])) continue;
+		if(update_buffer[2] == '0') continue;
 		r = fork();
 		if(r < 0) error(1,errno,"fork");
 		if(r > 0) continue;
-		if(update_buffer[1] == '0') execlp("xdotool","xdotool","keyup",actions[lid],NULL); //printf("%s up\n",actions[lid]);
-		if(update_buffer[1] == '1') execlp("xdotool","xdotool","keydown",actions[lid],NULL); //printf("%s down\n",actions[lid]);
+		if(update_buffer[1] == '0') execlp("xdotool","xdotool","keyup",actions[update_buffer[2]-'1'][lid],NULL); //printf("%s up\n",actions[lid]);
+		if(update_buffer[1] == '1') execlp("xdotool","xdotool","keydown",actions[update_buffer[2]-'1'][lid],NULL); //printf("%s down\n",actions[lid]);
 		return 0;
 	}
 	return 0;
