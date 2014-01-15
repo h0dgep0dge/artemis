@@ -20,13 +20,18 @@ char *str_tolower(char *str,int len);
 int nid_to_lid(char nid);
 char actions[9][10][20];
 char mappings[10][20];
+char pin[5];
 
-int main() {
-	char conf[] = "./artemis.conf";
+int main(int argc,char **argv) {
+	char conf[100];
+	if(argc == 1) strcpy(conf,"./artemis.conf");
+	else strcpy(conf,argv[1]);
 	char linebuffer[300];
 	FILE *c;
 	int i,fds[2],r;
 	struct stat buffer;
+	
+	strcpy(pin,"1234");
 	
 	for(i = 0;i < 8;i++) {
 		strcpy(actions[i][0],"Up");
@@ -39,8 +44,8 @@ int main() {
 		strcpy(actions[i][6],"x");
 		strcpy(actions[i][7],"y");
 	
-		strcpy(actions[i][8],"Return");
-		strcpy(actions[i][9],"Escape");
+		strcpy(actions[i][8],"q");
+		strcpy(actions[i][9],"Return");
 	}
 	
 	strcpy(mappings[0],"up");
@@ -58,7 +63,7 @@ int main() {
 	
 	if(socketpair(AF_UNIX,SOCK_STREAM,0,fds) < 0) error(1,errno,"socketpair");
 	
-	if(stat("artemis.conf",&buffer) == 0) {
+	if(stat(conf,&buffer) == 0) {
 		if((c = fopen(conf,"r")) == NULL) error(1,errno,"fopen");
 		int line;
 		for(line = 1;fgets(linebuffer,200,c) != NULL;line++) {
@@ -98,25 +103,33 @@ int main() {
 				fprintf(stderr,"Player field must be a number \n");
 				return 1;
 			}
-			else if(playerbuffer[0] == '0') {
+			if(strcmp(str_tolower(keybuffer,100),"pin") == 0) {
+				if(strlen(valuebuffer) != 4) {
+					fprintf(stderr,"Pin needs to be 4 characters long \n");
+					return 1;
+				}
+				strcpy(pin,valuebuffer);
+				continue;
+			}
+			if(playerbuffer[0] == '0') {
 				fprintf(stderr,"Player field must be greater than 0 \n");
 				return 1;
 			}
-			
 			i = conf_to_id(str_tolower(keybuffer,100));
 			if(i < 0) {
 				fprintf(stderr,"Unkown key on line %i \n",line);
 				continue;
 			}
 			strcpy(actions[playerbuffer[0]-'1'][i],valuebuffer);
-			printf("%s %s\n",actions[playerbuffer[0]-'1'][i],valuebuffer);
+			//printf("%s %s\n",actions[playerbuffer[0]-'1'][i],valuebuffer);
 		}
 		fclose(c);
 	} else {
 		int i;
 		if((c = fopen(conf,"w")) == NULL) error(1,errno,"fopen");
 		fprintf(c,"# Config file format\n"
-		          "# player:button:key\n");
+		          "# player:button:key\n\n"
+		          "0:pin:1234\n\n");
 		for(i = 0;i < 10;i++) fprintf(c,"1:%s:%s\n",mappings[i],actions[0][i]);
 		fprintf(c,"\n");
 		for(i = 0;i < 10;i++) fprintf(c,"2:%s:%s\n",mappings[i],actions[1][i]);
@@ -129,7 +142,7 @@ int main() {
 	if(r < 0) error(1,errno,"fork");
 	if(r == 0) {
 		if(dup2(fds[1],1) < 0) error(1,errno,"dup2");
-		execlp("node","node","socket.js",NULL);
+		execlp("node","node","socket.js",pin,NULL);
 		close(1);
 		return 0;
 	}
