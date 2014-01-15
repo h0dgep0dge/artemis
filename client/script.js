@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://10.22.33.12:8080");
+var ws = new WebSocket("ws://192.168.2.92:8080");
 
 ws.onopen = function() {
 	$("body").fadeIn();
@@ -6,6 +6,16 @@ ws.onopen = function() {
 
 ws.onerror = function() {
 	alert("An error occoured connecting to the websocket server");
+}
+
+ws.sendKey = function(keycode, state) {
+	var e = {
+		type: "key",
+		keycode: keycode,
+		state: state
+	}
+
+	ws.send(JSON.stringify(e));
 }
 
 var touches = {};
@@ -25,13 +35,13 @@ function updateTouches(e) {
 		var tid = touch.identifier;
 		var elem = document.elementFromPoint(touch.pageX, touch.pageY);
 
-		if (e.type == "touchstart")
+		if (e.type === "touchstart")
 			touches[tid] = false;
 
 		if (elem != null && elem.classList.contains("gamebutton")) {
 			var code = elem.dataset.byte;
 
-			if (states[code] == false) {
+			if (states[code] === false) {
 				states[code] = true;
 			}
 
@@ -40,10 +50,10 @@ function updateTouches(e) {
 					states[touches[tid].dataset.byte] = code;
 					touches[tid].classList.remove("pressed")
 
-					ws.send("#" + touches[tid].dataset.byte + "0");
+					ws.sendKey(touches[tid].dataset.byte, "up");
 				}
 
-				ws.send("#" + code + "1");
+				ws.sendKey(code, "down");
 
 				touches[tid] = elem;
 				elem.classList.add("pressed")
@@ -71,27 +81,10 @@ document.addEventListener("touchend", function(e) {
 
 		touches[tid].classList.remove("pressed");
 
-		ws.send("#" + touches[tid].dataset.byte + "0");
+		ws.sendKey(touches[tid].dataset.byte, "up");
 
 		touches[tid] = false;
 	}
 
 	e.preventDefault();
 })
-
-// $(".gamebutton").bind("touchstart", function(e) {
-// 	$(this).addClass("pressed");
-// 	e.preventDefault();
-
-// 	// Get the byte to send
-// 	var code = $(this).data("byte");
-// 	ws.send("#" + code + "1");
-// })
-
-// $(".gamebutton").bind("touchend", function(e) {
-// 	$(this).removeClass("pressed");
-
-// 	// Get the byte to send
-// 	var code = $(this).data("byte");
-// 	ws.send("#" + code + "0");
-// })
