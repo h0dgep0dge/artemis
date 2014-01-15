@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <ctype.h>
 
 int conf_to_id(char *name);
 char *str_tolower(char *str,int len);
@@ -25,6 +26,7 @@ int main() {
 	char linebuffer[200];
 	FILE *c;
 	int fds[2],r;
+	struct stat buffer;
 	
 	strcpy(actions[0],"Up");
 	strcpy(actions[1],"Down");
@@ -36,8 +38,8 @@ int main() {
 	strcpy(actions[6],"x");
 	strcpy(actions[7],"y");
 	
-	strcpy(actions[8],"e");
-	strcpy(actions[9],"t");
+	strcpy(actions[8],"Return");
+	strcpy(actions[9],"Escape");
 	
 	strcpy(mappings[0],"up");
 	strcpy(mappings[1],"down");
@@ -53,37 +55,42 @@ int main() {
 	strcpy(mappings[9],"start");
 	
 	if(socketpair(AF_UNIX,SOCK_STREAM,0,fds) < 0) error(1,errno,"socketpair");
-	if((c = fopen(conf,"r")) == NULL) error(1,errno,"fopen");
-	int line;
-	for(line = 1;fgets(linebuffer,200,c) != NULL;line++) {
-		char keybuffer[100];
-		char valuebuffer[100];
-		int i,c;
-		for(i = 0;isspace(linebuffer[i]);i++);
-		if(i == strlen(linebuffer)) // Empty line
-			continue;
-		for(c = 0;linebuffer[i] != ':';i++,c++) keybuffer[c] = linebuffer[i];
-		if(c == 0) { // Key missing
-			fprintf(stderr,"Key missing on line %i \n",line);
-			return 1;
-		}
-		i++;
-		keybuffer[c] = '\0';
-		for(c = 0;isalpha(linebuffer[i]);i++,c++) valuebuffer[c] = linebuffer[i];
-		if(c == 0) { // Value missing
-			fprintf(stderr,"Value missing or malformed on line %i \n",line);
-			return 1;
-		}
-		valuebuffer[c] = '\0';
-		i = conf_to_id(str_tolower(keybuffer,100));
-		if(i < 0) {
-			fprintf(stderr,"Unkown key on line %i \n",line);
-			continue;
-		}
-		strcpy(actions[i],valuebuffer);
-	}
-	int i;
 	
+	if(stat("artemis.conf",&buffer) == 0) {
+		if((c = fopen(conf,"r")) == NULL) error(1,errno,"fopen");
+		int line;
+		for(line = 1;fgets(linebuffer,200,c) != NULL;line++) {
+			char keybuffer[100];
+			char valuebuffer[100];
+			int i,c;
+			for(i = 0;isspace(linebuffer[i]);i++);
+			if(i == strlen(linebuffer)) // Empty line
+				continue;
+			for(c = 0;linebuffer[i] != ':';i++,c++) keybuffer[c] = linebuffer[i];
+			if(c == 0) { // Key missing
+				fprintf(stderr,"Key missing on line %i \n",line);
+				return 1;
+			}
+			i++;
+			keybuffer[c] = '\0';
+			for(c = 0;isalpha(linebuffer[i]);i++,c++) valuebuffer[c] = linebuffer[i];
+			if(c == 0) { // Value missing
+				fprintf(stderr,"Value missing or malformed on line %i \n",line);
+				return 1;
+			}
+			valuebuffer[c] = '\0';
+			i = conf_to_id(str_tolower(keybuffer,100));
+			if(i < 0) {
+				fprintf(stderr,"Unkown key on line %i \n",line);
+				continue;
+			}
+			strcpy(actions[i],valuebuffer);
+		}
+	} else {
+		int i;
+		if((c = fopen(conf,"w")) == NULL) error(1,errno,"fopen");
+		for(i = 0;i < 10;i++) fprintf(c,"%s:%s\n",mappings[i],actions[i]);
+	}
 	r = fork();
 	if(r < 0) error(1,errno,"fork");
 	if(r == 0) {
@@ -96,7 +103,6 @@ int main() {
 		int sc,lid,r;
 		char raw;
 		char update_buffer[2];
-		char exec_buffer[100];
 		while(read(fds[0],&raw,1) > 0 && raw != '#');
 		for(sc = 0;sc < 2;) {
 			if(read(fds[0],&raw,1) <= 0) error(1,errno,"read");
