@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://192.168.2.92:8080");
+var ws = new WebSocket("ws://10.22.33.12:8080");
 
 ws.onopen = function() {
 	$("body").fadeIn();
@@ -6,6 +6,11 @@ ws.onopen = function() {
 
 ws.onerror = function() {
 	alert("An error occoured connecting to the websocket server");
+}
+
+ws.onclose = function() {
+	alert("Connection closed!")
+	$("body").hide();
 }
 
 ws.sendKey = function(keycode, state) {
