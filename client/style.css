@@ -88,10 +88,8 @@
 	vertical-align: top;
 	}
 
-	
-	
+	/*formats letters on circles*/
 	.circle-up, .circle-down, .circle-left, .circle-right { 
-		/*formats letters on circles*/
 		font-size: 19px;
 		margin: auto;
 		font-family: Tahoma, Geneva, sans-serif;
@@ -114,13 +112,11 @@
 		margin: auto;
 		}
 
-	
 	#lr_circles{
 		width: 170px;
 		height: 60px;
 		padding: 5px 0 0 0;
 		}
-	
 		.circle-left{ 
 			float: left;
 			}
