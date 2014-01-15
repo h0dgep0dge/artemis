@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://10.22.33.231:8080");
+var ws = new WebSocket("ws://10.22.33.12:8080");
 
 ws.onopen = function() {
 	$("body").fadeIn();
@@ -32,16 +32,11 @@ function updateTouches(e) {
 			var code = elem.dataset.byte;
 
 			if (states[code] == false) {
-				console.log("Set status start")
 				states[code] = true;
 			}
 
 			if (touches[tid] != elem) {
-				console.log("Set elem start")
-
 				if (touches[tid] != false) {
-					console.log("Ses disabling other")
-
 					states[touches[tid].dataset.byte] = code;
 					touches[tid].classList.remove("pressed")
 
