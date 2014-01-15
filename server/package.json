@@ -2,7 +2,7 @@
   "name": "Artemis",
   "version": "0.0.0",
   "description": "",
-  "main": "index.coffee",
+  "main": "socket.coffee",
   "dependencies": {
     "ws": "~0.4.31"
   },

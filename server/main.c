@@ -86,10 +86,12 @@ int main() {
 			}
 			strcpy(actions[i],valuebuffer);
 		}
+		fclose(c);
 	} else {
 		int i;
 		if((c = fopen(conf,"w")) == NULL) error(1,errno,"fopen");
 		for(i = 0;i < 10;i++) fprintf(c,"%s:%s\n",mappings[i],actions[i]);
+		fclose(c);
 	}
 	r = fork();
 	if(r < 0) error(1,errno,"fork");
