@@ -235,10 +235,10 @@ background-image: -webkit-gradient(linear, left top, left bottom, from(#494949),
 		}
 
 
-
+/*
 .pressed {
 	opacity: 0.5;
-}
+}*/
 
 body {
 	display: none;
