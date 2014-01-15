@@ -95,7 +95,7 @@ int main() {
 	if(r < 0) error(1,errno,"fork");
 	if(r == 0) {
 		if(dup2(fds[1],1) < 0) error(1,errno,"dup2");
-		execlp("node","node","socket.js",NULL);
+		execlp("./index.js","./index.js",NULL);
 		close(1);
 		return 0;
 	}
