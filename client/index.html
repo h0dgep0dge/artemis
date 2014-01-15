@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <!--
-	index.html: The main page for the artemis project by Shannon Denham
+	index.html: The main page for the artemis project 
+	by Shannon Denham
 -->
 <html>
 	<head>
 		<link rel="stylesheet" href="style.css" />
 		<script src="lib/jquery.js"></script>
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.3">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.25">
 	</head>
 	<body>
 		<div id="arrows"> 
@@ -24,14 +25,16 @@
 		</div>
 
 		<div id="circles">
-			<div data-byte="y" class="gamebutton circle-up">Y</div>
+			<div data-byte="x" class="gamebutton circle-up">X</div>
+
 			<div id="lr_circles"> 
-				<div data-byte="a" class="gamebutton circle-right">A</div>
-				<div data-byte="x" class="gamebutton circle-left">X</div>
+				<div data-byte="y" class="gamebutton circle-right">Y</div>
+				<div data-byte="a" class="gamebutton circle-left">A</div>
 			</div>
+			
 			<div data-byte="b" class="gamebutton circle-down">B</div>
 		</div>
-
+		
 		<script src="script.js"></script>
 	</body>
 </html>
