@@ -1,6 +1,60 @@
 body {
 	background-color: #FAFAFA;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	position: relative;
 	}
+
+html {
+	height: 100%;
+}
+
+h1 {
+	font-family: sans-serif;
+	font-size: 20pt;
+}
+
+.controlgroup {
+	display: none;
+}
+
+.controlgroup[data-cgname="snes"] {
+	/*display: block;*/
+}
+
+.controlgroup[data-cgname="lr"] {
+	width: 100%;
+	height: 100%;
+}
+
+.lrbtn {
+	height: 90%;
+	width: 50%;
+	font-family: sans-serif;
+	font-size: 40pt;
+	text-align: center;
+	color: white;
+	font-weight: bold;
+}
+
+.lr-left {
+	background: orange;
+	float: left;
+}
+
+.lr-right {
+	background: red;
+	float: right;
+}
+
+.lr-start {
+	height: 10%;
+	width: 100%;
+	background: green;
+	position: relative;
+	clear: both;
+}
 
 #arrows{
 	width: 170px;

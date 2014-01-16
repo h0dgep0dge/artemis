@@ -1,4 +1,4 @@
-var ws = new WebSocket("ws://10.22.33.213:8080");
+var ws = new WebSocket("ws://10.22.33.13:8080");
 
 ws.onopen = function() {
 	$("body").fadeIn();
@@ -67,29 +67,29 @@ function updateTouches(e) {
 	}
 }
 
-document.addEventListener("touchstart", function(e) {
-	updateTouches(e);
+// document.addEventListener("touchstart", function(e) {
+// 	updateTouches(e);
 
-	e.preventDefault();
-})
+// 	e.preventDefault();
+// })
 
-document.addEventListener("touchmove", function(e) {
-	updateTouches(e);
+// document.addEventListener("touchmove", function(e) {
+// 	updateTouches(e);
 
-	e.preventDefault();
-})
+// 	e.preventDefault();
+// })
 
-document.addEventListener("touchend", function(e) {
-	for (var i=0; i < e.changedTouches.length; i++) {
-		var touch = e.changedTouches[i];
-		var tid = touch.identifier;
+// document.addEventListener("touchend", function(e) {
+// 	for (var i=0; i < e.changedTouches.length; i++) {
+// 		var touch = e.changedTouches[i];
+// 		var tid = touch.identifier;
 
-		touches[tid].classList.remove("pressed");
+// 		touches[tid].classList.remove("pressed");
 
-		ws.sendKey(touches[tid].dataset.byte, "up");
+// 		ws.sendKey(touches[tid].dataset.byte, "up");
 
-		touches[tid] = false;
-	}
+// 		touches[tid] = false;
+// 	}
 
-	e.preventDefault();
-})
+// 	e.preventDefault();
+// })
